@@ -1,6 +1,104 @@
 import jsPDF from 'jspdf';
 
-export const generateCropPDF = (crop, materials) => {
+const translations = {
+  en: {
+    cropReport: 'Crop Report',
+    cropDetails: 'Crop Details',
+    cropName: 'Crop Name:',
+    startDate: 'Start Date:',
+    endDate: 'End Date:',
+    landArea: 'Land Area:',
+    duration: 'Duration:',
+    status: 'Status:',
+    months: 'months',
+    statusActive: 'Active',
+    statusCompleted: 'Completed',
+    statusCancelled: 'Cancelled',
+    expenseDetails: 'Expense Details',
+    noExpenses: 'No expenses recorded',
+    date: 'Date',
+    type: 'Type',
+    name: 'Name',
+    qty: 'Qty',
+    rate: 'Rate (Rs)',
+    total: 'Total (Rs)',
+    financialSummary: 'Financial Summary',
+    totalCost: 'Total Cost:',
+    production: 'Production:',
+    sellingPrice: 'Selling Price:',
+    totalIncome: 'Total Income:',
+    netProfit: 'Net Profit:',
+    netLoss: 'Net Loss:',
+    reportGenerated: 'Report Generated:',
+    notAvailable: 'Not Available'
+  },
+  hi: {
+    cropReport: 'फसल रिपोर्ट',
+    cropDetails: 'फसल विवरण',
+    cropName: 'फसल का नाम:',
+    startDate: 'शुरुआत की तारीख:',
+    endDate: 'समाप्ति की तारीख:',
+    landArea: 'जमीन का क्षेत्रफल:',
+    duration: 'अवधि:',
+    status: 'स्थिति:',
+    months: 'महीने',
+    statusActive: 'चालू',
+    statusCompleted: 'पूर्ण',
+    statusCancelled: 'रद्द',
+    expenseDetails: 'खर्च का विवरण',
+    noExpenses: 'कोई खर्च दर्ज नहीं',
+    date: 'तारीख',
+    type: 'प्रकार',
+    name: 'नाम',
+    qty: 'मात्रा',
+    rate: 'दर (₹)',
+    total: 'कुल (₹)',
+    financialSummary: 'वित्तीय सारांश',
+    totalCost: 'कुल खर्च:',
+    production: 'उत्पादन:',
+    sellingPrice: 'विक्रय मूल्य:',
+    totalIncome: 'कुल आय:',
+    netProfit: 'शुद्ध लाभ:',
+    netLoss: 'शुद्ध हानि:',
+    reportGenerated: 'रिपोर्ट तैयार:',
+    notAvailable: 'उपलब्ध नहीं'
+  },
+  mr: {
+    cropReport: 'पीक अहवाल',
+    cropDetails: 'पीक तपशील',
+    cropName: 'पीक नाव:',
+    startDate: 'सुरुवातीची तारीख:',
+    endDate: 'समाप्तीची तारीख:',
+    landArea: 'जमिनीचे क्षेत्रफळ:',
+    duration: 'कालावधी:',
+    status: 'स्थिती:',
+    months: 'महिने',
+    statusActive: 'सक्रिय',
+    statusCompleted: 'पूर्ण',
+    statusCancelled: 'रद्द',
+    expenseDetails: 'खर्च तपशील',
+    noExpenses: 'कोणताही खर्च नोंदलेला नाही',
+    date: 'तारीख',
+    type: 'प्रकार',
+    name: 'नाव',
+    qty: 'प्रमाण',
+    rate: 'दर (₹)',
+    total: 'एकूण (₹)',
+    financialSummary: 'आर्थिक सारांश',
+    totalCost: 'एकूण खर्च:',
+    production: 'उत्पादन:',
+    sellingPrice: 'विक्री दर:',
+    totalIncome: 'एकूण उत्पन्न:',
+    netProfit: 'निव्वळ नफा:',
+    netLoss: 'निव्वळ तोटा:',
+    reportGenerated: 'अहवाल तयार:',
+    notAvailable: 'उपलब्ध नाही'
+  }
+};
+
+export const generateCropPDF = (crop, materials, lang = 'en') => {
+  const dict = translations[lang] || translations.en;
+  const t = (key) => dict[key] || key;
   const doc = new jsPDF();
   
   // Header with Background
@@ -14,7 +112,7 @@ export const generateCropPDF = (crop, materials) => {
   doc.text('KISAN PROFIT MITRA', 105, 15, { align: 'center' });
   doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');
-  doc.text('Crop Report', 105, 25, { align: 'center' });
+  doc.text(t('cropReport'), 105, 25, { align: 'center' });
   
   // Reset text color
   doc.setTextColor(0, 0, 0);
@@ -25,26 +123,79 @@ export const generateCropPDF = (crop, materials) => {
   doc.rect(15, yPos - 5, 180, 8, 'F');
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Crop Details', 20, yPos);
+  doc.text(t('cropDetails'), 20, yPos);
   
   yPos += 10;
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   
-  const cropDetails = [
-    { label: 'Crop Name:', value: crop.cropType },
-    { label: 'Start Date:', value: new Date(crop.startDate).toLocaleDateString('en-IN') },
-    crop.completedAt ? { label: 'End Date:', value: new Date(crop.completedAt).toLocaleDateString('en-IN') } : null,
-    { label: 'Land Area:', value: crop?.landSize?.value && crop?.landSize?.unit ? `${crop.landSize.value} ${crop.landSize.unit}` : 'Not Available' },
-    { label: 'Duration:', value: `${crop.expectedDuration} months` },
-    { label: 'Status:', value: crop.status === 'चालू' ? 'Active' : 'Completed' }
-  ].filter(Boolean);
+  // Safely format values to avoid undefined/null showing up as code in PDF
+  const cropNameText = (() => {
+    const englishMap = {
+      'धान': 'Rice',
+      'गेहूं': 'Wheat',
+      'गन्ना': 'Sugarcane',
+      'बैंगन': 'Brinjal',
+      'गोभी': 'Cauliflower',
+      'मिर्च': 'Chilli'
+    };
+    const primary = typeof crop?.cropType === 'string' && crop.cropType.trim()
+      ? crop.cropType.trim()
+      : undefined;
+    const translated = primary && englishMap[primary];
+    const candidates = [
+      translated,
+      crop?.cropNameEnglish,
+      primary,
+      crop?.name,
+      crop?.title
+    ];
+    const name = candidates.find(v => typeof v === 'string' && v.trim());
+    return name ? name.trim() : 'Not Available';
+  })();
+  const startDateText = crop?.startDate
+    ? new Date(crop.startDate).toLocaleDateString('en-IN')
+    : t('notAvailable');
+  const endDateText = crop?.completedAt
+    ? new Date(crop.completedAt).toLocaleDateString('en-IN')
+    : null;
+  const landUnitTranslation = {
+    'बीघा': 'Bigha',
+    'डिस्मिल': 'Dismil',
+    'एकड़': 'Acre',
+    'हेक्टेयर': 'Hectare'
+  };
+  const hasLandValue = crop?.landSize?.value !== undefined && crop?.landSize?.value !== null;
+  const landUnit = landUnitTranslation[crop?.landSize?.unit] || crop?.landSize?.unit || '';
+  const landAreaText = hasLandValue
+    ? `${crop.landSize.value} ${landUnit}`.trim()
+    : t('notAvailable');
+  const durationText = Number.isFinite(Number(crop?.expectedDuration))
+    ? `${Number(crop.expectedDuration)} ${t('months')}`
+    : t('notAvailable');
+  const statusTextMap = {
+    'चालू': t('statusActive'),
+    'पूर्ण': t('statusCompleted'),
+    'रद्द': t('statusCancelled')
+  };
+  const statusText = statusTextMap[crop?.status] || crop?.status || t('notAvailable');
+
+  const cropDetails = crop && Object.keys(crop).length
+    ? [
+        { label: t('cropName'), value: cropNameText },
+        { label: t('startDate'), value: startDateText },
+        endDateText ? { label: t('endDate'), value: endDateText } : null,
+        { label: t('landArea'), value: landAreaText },
+        { label: t('duration'), value: durationText },
+        { label: t('status'), value: statusText }
+      ].filter(Boolean)
+    : [{ label: t('cropDetails'), value: t('notAvailable') }];
   
   cropDetails.forEach(detail => {
     doc.setFont('helvetica', 'bold');
     doc.text(detail.label, 20, yPos);
     doc.setFont('helvetica', 'normal');
-    doc.text(detail.value, 65, yPos);
+    doc.text(String(detail.value || ''), 65, yPos);
     yPos += 7;
   });
   
@@ -54,14 +205,14 @@ export const generateCropPDF = (crop, materials) => {
   doc.rect(15, yPos - 5, 180, 8, 'F');
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Expense Details', 20, yPos);
+  doc.text(t('expenseDetails'), 20, yPos);
   
   yPos += 12;
   
   if (!materials || materials.length === 0) {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('No expenses recorded', 20, yPos);
+    doc.text(t('noExpenses'), 20, yPos);
     yPos += 10;
   } else {
     // Table header
@@ -69,12 +220,12 @@ export const generateCropPDF = (crop, materials) => {
     doc.rect(15, yPos - 5, 180, 8, 'F');
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Date', 20, yPos);
-    doc.text('Type', 50, yPos);
-    doc.text('Name', 80, yPos);
-    doc.text('Qty', 120, yPos);
-    doc.text('Rate (Rs)', 145, yPos);
-    doc.text('Total (Rs)', 170, yPos);
+    doc.text(t('date'), 20, yPos);
+    doc.text(t('type'), 50, yPos);
+    doc.text(t('name'), 80, yPos);
+    doc.text(t('qty'), 120, yPos);
+    doc.text(t('rate'), 145, yPos);
+    doc.text(t('total'), 170, yPos);
     
     yPos += 8;
     doc.setFont('helvetica', 'normal');
@@ -167,14 +318,14 @@ export const generateCropPDF = (crop, materials) => {
   doc.rect(15, yPos - 5, 180, 8, 'F');
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Financial Summary', 20, yPos);
+  doc.text(t('financialSummary'), 20, yPos);
   
   yPos += 12;
   doc.setFontSize(11);
   
   // Total Cost
   doc.setFont('helvetica', 'bold');
-  doc.text('Total Cost:', 20, yPos);
+  doc.text(t('totalCost'), 20, yPos);
   doc.setFont('helvetica', 'normal');
   doc.text(`Rs ${crop.totalCost?.toFixed(2) || '0.00'}`, 170, yPos);
   yPos += 8;
@@ -193,19 +344,19 @@ export const generateCropPDF = (crop, materials) => {
     const prodUnit = unitTranslation[crop.production.unit] || crop.production.unit;
     
     doc.setFont('helvetica', 'bold');
-    doc.text('Production:', 20, yPos);
+    doc.text(t('production'), 20, yPos);
     doc.setFont('helvetica', 'normal');
     doc.text(`${crop.production.quantity} ${prodUnit}`, 170, yPos);
     yPos += 8;
     
     doc.setFont('helvetica', 'bold');
-    doc.text('Selling Price:', 20, yPos);
+    doc.text(t('sellingPrice'), 20, yPos);
     doc.setFont('helvetica', 'normal');
     doc.text(`Rs ${crop.production.sellingPrice}/${prodUnit}`, 170, yPos);
     yPos += 8;
     
     doc.setFont('helvetica', 'bold');
-    doc.text('Total Income:', 20, yPos);
+    doc.text(t('totalIncome'), 20, yPos);
     doc.setFont('helvetica', 'normal');
     doc.text(`Rs ${crop.totalIncome?.toFixed(2) || '0.00'}`, 170, yPos);
     yPos += 10;
@@ -218,7 +369,7 @@ export const generateCropPDF = (crop, materials) => {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
     doc.setTextColor(isProfit ? 0 : 139, isProfit ? 100 : 0, 0);
-    doc.text(`Net ${isProfit ? 'Profit' : 'Loss'}:`, 20, yPos);
+    doc.text(isProfit ? t('netProfit') : t('netLoss'), 20, yPos);
     doc.text(`Rs ${Math.abs(crop.netProfit || 0).toFixed(2)}`, 170, yPos);
     doc.setTextColor(0, 0, 0);
   }
@@ -227,7 +378,7 @@ export const generateCropPDF = (crop, materials) => {
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(128, 128, 128);
-  const footerText = `Report Generated: ${new Date().toLocaleDateString('en-IN')} ${new Date().toLocaleTimeString('en-IN')}`;
+  const footerText = `${t('reportGenerated')} ${new Date().toLocaleDateString('en-IN')} ${new Date().toLocaleTimeString('en-IN')}`;
   doc.text(footerText, 105, 285, { align: 'center' });
   
   // Open PDF in new tab for preview instead of auto-download

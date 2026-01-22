@@ -11,7 +11,18 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Register service worker for better performance
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => {
+        console.log('SW registered:', registration);
+      })
+      .catch(err => {
+        console.log('SW registration failed:', err);
+      });
+  });
+}
+
+// Performance monitoring
 reportWebVitals();

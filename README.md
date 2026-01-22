@@ -6,14 +6,28 @@ A production-ready web application designed for Indian farmers to track their cr
 
 ### 🌟 Features
 
+- **Multi-language Support**: Switch between English, Hindi, and Marathi
 - **User Authentication**: Secure signup/login with JWT tokens
 - **Crop Management**: Track multiple crops simultaneously
 - **Digital Kheti Diary**: Add expenses gradually over months
 - **Profit/Loss Calculator**: Automatic calculation when crop is completed
-- **PDF Reports**: Generate detailed PDF reports in Hindi
-- **Mobile-First Design**: Optimized for smartphones
-- **Hindi Interface**: Fully designed for Hindi-speaking farmers
-- **Cloud-Based**: Data persists even when your device is off
+- **PDF Reports**: Generate detailed PDF reports
+- **Mobile-First Design**: Optimized for low-end smartphones
+- **Progressive Web App**: Install on home screen, works offline
+- **Touch-Optimized**: Minimum 44x44px touch targets
+- **Fast Performance**: Lazy loading, service worker caching
+- **Cloud-Based**: Data persists across devices
+
+### 📱 Mobile Optimizations
+
+- **Responsive Design**: Works on all screen sizes (320px to 4K)
+- **System Fonts**: No external font downloads for faster load
+- **Lazy Loading**: Images load only when needed
+- **Service Worker**: Offline support and asset caching
+- **Reduced Animations**: Better performance on low-end devices
+- **Touch Feedback**: Proper active states for all interactive elements
+- **Safe Area**: Support for notched devices (iPhone X+)
+- **Bottom Sheets**: Mobile-friendly modals
 
 ### 📋 Tech Stack
 

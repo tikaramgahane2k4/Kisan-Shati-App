@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Welcome from './pages/Welcome';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -41,19 +42,21 @@ const PublicRoute = ({ children }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<PublicRoute><Welcome /></PublicRoute>} />
-          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-          <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/crop/:id" element={<ProtectedRoute><CropDetails /></ProtectedRoute>} />
-          <Route path="/crop/:id/add-material" element={<ProtectedRoute><AddMaterial /></ProtectedRoute>} />
-          <Route path="/crop/:id/edit-material/:materialId" element={<ProtectedRoute><EditMaterial /></ProtectedRoute>} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<PublicRoute><Welcome /></PublicRoute>} />
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/crop/:id" element={<ProtectedRoute><CropDetails /></ProtectedRoute>} />
+            <Route path="/crop/:id/add-material" element={<ProtectedRoute><AddMaterial /></ProtectedRoute>} />
+            <Route path="/crop/:id/edit-material/:materialId" element={<ProtectedRoute><EditMaterial /></ProtectedRoute>} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }
 

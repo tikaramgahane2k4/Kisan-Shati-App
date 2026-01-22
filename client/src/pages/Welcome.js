@@ -1,11 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 function Welcome() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex flex-col welcome-shell">
+      <div className="absolute top-4 right-4 welcome-lang">
+        <LanguageSwitcher />
+      </div>
       {/* Hero Section */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
         <div className="text-center max-w-2xl">
@@ -20,19 +26,19 @@ function Welcome() {
 
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            किसान प्रॉफिट मित्र
+            {t('heroTitle')}
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-700 mb-12">
-            आपकी डिजिटल खेती डायरी
+            {t('heroSubtitle')}
           </p>
 
           {/* Features */}
-          <div className="grid gap-4 mb-12 text-left max-w-md mx-auto">
-            <Feature icon="📝" text="खर्च का पूरा हिसाब रखें" />
-            <Feature icon="📊" text="लाभ-हानि की गणना करें" />
-            <Feature icon="🌾" text="सभी फसलों का रिकॉर्ड" />
-            <Feature icon="📄" text="PDF रिपोर्ट बनाएं" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 text-left max-w-2xl mx-auto w-full">
+            <Feature icon="📝" text={t('feature1')} />
+            <Feature icon="📊" text={t('feature2')} />
+            <Feature icon="🌾" text={t('feature3')} />
+            <Feature icon="📄" text={t('feature4')} />
           </div>
 
           {/* Buttons */}
@@ -41,13 +47,13 @@ function Welcome() {
               onClick={() => navigate('/signup')}
               className="px-8 py-4 bg-primary text-white rounded-lg font-semibold text-lg shadow-lg hover:bg-secondary hover:shadow-xl"
             >
-              शुरू करें
+              {t('ctaStart')}
             </button>
             <button
               onClick={() => navigate('/login')}
               className="px-8 py-4 bg-white text-primary border-2 border-primary rounded-lg font-semibold text-lg shadow-md hover:bg-green-50"
             >
-              लॉगिन करें
+              {t('ctaLogin')}
             </button>
           </div>
         </div>
@@ -55,7 +61,7 @@ function Welcome() {
 
       {/* Footer */}
       <div className="py-6 text-center text-gray-600">
-        <p className="text-sm">भारतीय किसानों के लिए बनाया गया</p>
+        <p className="text-sm">{t('footerTagline')}</p>
       </div>
     </div>
   );
