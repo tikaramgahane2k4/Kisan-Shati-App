@@ -19,15 +19,15 @@
     },
     {
       "src": "/static/(.*)",
-      "dest": "client/build/static/$1"
+      "dest": "static/$1"
     },
     {
       "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg))",
-      "dest": "client/build/$1"
+      "dest": "$1"
     },
     {
       "src": "/(.*)",
-      "dest": "client/build/index.html"
+      "dest": "index.html"
     }
   ],
   "env": {
