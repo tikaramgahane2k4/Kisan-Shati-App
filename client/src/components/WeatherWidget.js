@@ -61,7 +61,7 @@ const makeAdvisory = (t, tMax, rainMm) => {
 };
 
 function WeatherWidget() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cityQuery, setCityQuery] = useState('');
