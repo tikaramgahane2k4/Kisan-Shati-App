@@ -1,222 +1,78 @@
-# Kisan Profit Mitra - किसान प्रॉफिट मित्र
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-## Full-Stack Web Application for Indian Farmers
+# AgriExpense - Farmer's Crop Management System
 
-A production-ready web application designed for Indian farmers to track their crop expenses, calculate profit/loss, and generate PDF reports. Built with React, Node.js, Express, and MongoDB.
+A full-stack web application for farmers to manage crops and track expenses efficiently with MongoDB backend.
 
-### 🌟 Features
+## 📁 Project Structure
 
-- **Multi-language Support**: Switch between English, Hindi, and Marathi
-- **User Authentication**: Secure signup/login with JWT tokens
-- **Crop Management**: Track multiple crops simultaneously
-- **Digital Kheti Diary**: Add expenses gradually over months
-- **Profit/Loss Calculator**: Automatic calculation when crop is completed
-- **PDF Reports**: Generate detailed PDF reports
-- **Mobile-First Design**: Optimized for low-end smartphones
-- **Progressive Web App**: Install on home screen, works offline
-- **Touch-Optimized**: Minimum 44x44px touch targets
-- **Fast Performance**: Lazy loading, service worker caching
-- **Cloud-Based**: Data persists across devices
-
-### 📱 Mobile Optimizations
-
-- **Responsive Design**: Works on all screen sizes (320px to 4K)
-- **System Fonts**: No external font downloads for faster load
-- **Lazy Loading**: Images load only when needed
-- **Service Worker**: Offline support and asset caching
-- **Reduced Animations**: Better performance on low-end devices
-- **Touch Feedback**: Proper active states for all interactive elements
-- **Safe Area**: Support for notched devices (iPhone X+)
-- **Bottom Sheets**: Mobile-friendly modals
-
-### 📋 Tech Stack
-
-**Frontend:**
-- React.js
-- React Router
-- Tailwind CSS
-- Axios
-- jsPDF
-
-**Backend:**
-- Node.js
-- Express.js
-- MongoDB (Mongoose)
-- JWT Authentication
-- Multer (File Upload)
-- Express Validator
-
-### 🚀 Getting Started
-
-#### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB Atlas account (free)
-- npm or yarn
-
-#### Installation
-
-1. **Clone the repository**
-```bash
-cd "/home/sama/Kisan Ka Shati"
+```
+agriexpense/
+├── backend/              # Express.js + MongoDB backend
+│   ├── config/          # Database configuration
+│   ├── controllers/     # Request handlers
+│   ├── models/          # MongoDB models
+│   ├── routes/          # API routes
+│   ├── middleware/      # Auth & other middleware
+│   ├── server.js        # Server entry point
+│   ├── package.json
+│   └── README.md
+│
+└── frontend/             # React + Vite frontend
+    ├── src/
+    │   ├── components/   # Reusable components
+    │   ├── pages/        # Page components
+    │   ├── services/     # API service layer
+    │   ├── App.jsx
+    │   └── index.jsx
+    ├── public/
+    ├── index.html
+    ├── vite.config.js
+    ├── package.json
+    └── README.md
 ```
 
-2. **Install dependencies**
+## 🚀 Quick Start
+
+**Prerequisites:** Node.js (v16+), MongoDB
+
+### 1. Backend Setup
+
 ```bash
-# Install backend dependencies
+cd backend
 npm install
-
-# Install frontend dependencies
-cd client
-npm install
-cd ..
-```
-
-3. **Setup Environment Variables**
-
-Create a `.env` file in the root directory:
-```env
-MONGODB_URI=your_mongodb_atlas_connection_string
-JWT_SECRET=your_jwt_secret_key_here
-PORT=5000
-```
-
-Create a `.env` file in the `client` directory:
-```env
-REACT_APP_API_URL=http://localhost:5000/api
-```
-
-4. **Run the application**
-
-```bash
-# Development mode (runs both frontend and backend)
+cp .env.example .env
+# Edit .env with your MongoDB URI
 npm run dev
-
-# Run backend only
-npm run server
-
-# Run frontend only
-npm run client
 ```
 
-5. **Access the application**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+Backend: `http://localhost:5000`
 
-### 📱 Usage Guide
-
-1. **Sign Up**: Create an account with your name, mobile number, and password
-2. **Login**: Access your dashboard
-3. **Start a Crop**: Create a new crop with details (crop type, land size, start date)
-4. **Add Expenses**: Record daily/weekly expenses as they occur
-5. **Complete Crop**: Enter production details when harvest is done
-6. **View Profit/Loss**: See automatic calculations
-7. **Generate PDF**: Download detailed reports
-
-### 🗂️ Project Structure
-
-```
-kisan-profit-mitra/
-├── server/
-│   ├── models/          # MongoDB schemas
-│   ├── routes/          # API endpoints
-│   ├── middleware/      # Auth & file upload
-│   └── server.js        # Express app
-├── client/
-│   ├── src/
-│   │   ├── pages/       # React pages
-│   │   ├── context/     # Auth context
-│   │   └── utils/       # API & PDF utilities
-│   └── public/
-├── uploads/             # Uploaded bills/receipts
-├── package.json
-└── README.md
-```
-
-### 🌐 Deployment
-
-**Frontend (Vercel):**
-```bash
-cd client
-npm run build
-# Deploy the build folder to Vercel
-```
-
-**Backend (Render):**
-- Connect your GitHub repository to Render
-- Set environment variables in Render dashboard
-- Deploy automatically on push
-
-**Database (MongoDB Atlas):**
-- Already cloud-hosted
-- Update MONGODB_URI in environment variables
-
-### 🔐 Environment Variables
-
-**Backend (.env):**
-- `MONGODB_URI`: MongoDB Atlas connection string
-- `JWT_SECRET`: Secret key for JWT tokens
-- `PORT`: Server port (default: 5000)
-
-**Frontend (client/.env):**
-- `REACT_APP_API_URL`: Backend API URL
-
-### 📊 API Endpoints
-
-**Authentication:**
-- POST `/api/auth/signup` - Register new user
-- POST `/api/auth/login` - Login user
-- GET `/api/auth/me` - Get current user
-
-**Crops:**
-- POST `/api/crops` - Create new crop
-- GET `/api/crops` - Get all crops
-- GET `/api/crops/:id` - Get single crop
-- PUT `/api/crops/:id` - Update crop
-- PUT `/api/crops/:id/complete` - Complete crop
-- DELETE `/api/crops/:id` - Delete crop
-
-**Materials (Expenses):**
-- POST `/api/materials` - Add expense
-- GET `/api/materials?crop=:cropId` - Get expenses
-- GET `/api/materials/:id` - Get single expense
-- PUT `/api/materials/:id` - Update expense
-- DELETE `/api/materials/:id` - Delete expense
-
-### 🐛 Troubleshooting
-
-**MongoDB Connection Error:**
-- Ensure MongoDB Atlas IP whitelist includes your IP (or use 0.0.0.0/0 for development)
-- Check your connection string format
-
-**CORS Issues:**
-- Ensure REACT_APP_API_URL is set correctly
-- Check CORS configuration in server.js
-
-**File Upload Issues:**
-- Check uploads folder permissions
-- Ensure file size is under 5MB
-
-### 👨‍💻 Development
+### 2. Frontend Setup
 
 ```bash
-# Run tests
-npm test
-
-# Check for errors
-npm run lint
-
-# Format code
-npm run format
+cd frontend
+npm install
+cp .env.example .env
+npm run dev
 ```
 
-### 📝 License
+Frontend: `http://localhost:3000`
 
-MIT
+## 🌟 Features
 
-### 🙏 Support
+- User Authentication (JWT)
+- Crop Management (CRUD operations)
+- Expense Tracking per crop
+- Dashboard with overview
+- Print/Export reports
+- MongoDB data persistence
 
-For support, contact the development team or open an issue on GitHub.
+## 🛠️ Tech Stack
 
----
+**Backend:** Express.js, MongoDB, Mongoose, JWT, bcryptjs  
+**Frontend:** React 19, Vite, React Router, Axios, TailwindCSS
 
-**Made with ❤️ for Indian Farmers**
+View original AI Studio app: https://ai.studio/apps/drive/1ns-8wUx9tjbGHPs-1RGb-FCGaPL5VPql

@@ -1,0 +1,7 @@
+{
+  "name": "AgriExpense - Farmer's Crop Management System",
+  "description": "A modern, responsive crop expense tracking application designed for farmers to manage their agricultural finances, track labour, seeds, and equipment costs, and generate professional PDF reports.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
