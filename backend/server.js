@@ -19,7 +19,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
   'https://kisan-sathi-app.vercel.app',
-  'https://kisan-sathi-app-1cd6.vercel.app'
+  'https://kisan-sathi-app-1cd6.vercel.app',
+  'https://kisan-sathi-app-tfw5.vercel.app'
 ];
 
 app.use(
